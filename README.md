@@ -1,4 +1,4 @@
-# 🧶 Digital Library - Crochet Patterns Infrastructure
+# 📚Digital Library - Infrastructure
 
 Local infrastructure for managing, searching, and storing a digital library.
 
