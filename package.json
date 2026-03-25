@@ -1,0 +1,11 @@
+{
+    "name": "digital-library",
+    "version": "1.0.0",
+    "description": "Docker infrastructure for the digital library project",
+    "scripts": {
+        "docker:dev": "docker compose --env-file .env.dev --profile dev up -d",
+        "docker:prod": "docker compose --env-file .env.prod up -d",
+        "docker:down": "docker compose down",
+        "docker:logs": "docker compose logs -f"
+    }
+}

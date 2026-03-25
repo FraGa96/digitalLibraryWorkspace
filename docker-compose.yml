@@ -1,0 +1,82 @@
+services:
+  postgres:
+    image: postgres:17.4
+    container_name: digital-library-postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB} 
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: digital-library-pgadmin
+    restart: always
+    profiles: ["debug", "dev"]
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "${PGADMIN_PORT:-8080}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+
+  minio:
+    image: minio/minio:latest
+    container_name: digital-library-minio
+    restart: always
+    command: server /data --console-address ":9001"
+    environment:
+      - MINIO_ROOT_USER=${MINIO_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_PASSWORD}
+    ports:
+      - 9000:9000 # API S3
+      - 9001:9001 # Web Console
+    volumes:
+      - minio_data:/data
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    container_name: digital-library-opensearch
+    restart: always
+    environment:
+      - cluster.name=digital-library-cluster
+      - node.name=digital-library-node1
+      - bootstrap.memory_lock=true
+      - discovery.type=single-node
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - DISABLE_SECURITY_PLUGIN=${OS_SECURITY_DISABLED:-false}
+      - DISABLE_INSTALL_DEMO_CONFIG=${OS_DEMO_CONFIG_DISABLED:-false}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: digital-library-opensearch-dashboards
+    restart: always
+    profiles: ["debug", "dev"]
+    ports:
+      - "5601:5601"
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch:9200"]'
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=${OS_SECURITY_DISABLED:-false}
+    depends_on:
+      - opensearch
+
+volumes:
+  postgres_data:
+  pgadmin_data:
+  minio_data:
+  opensearch_data:

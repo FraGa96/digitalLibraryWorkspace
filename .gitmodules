@@ -1,0 +1,3 @@
+[submodule "DigitalLibrary"]
+	path = DigitalLibrary
+	url = git@github.com-fraga:FraGa96/DigitalLibrary.git
