@@ -1,0 +1,23 @@
+name: Infra task
+description: What's the task about?
+title: "[Infra]: "
+labels: ["infra"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks to add this task for **Digital Library**
+  - type: textarea
+    id: description
+    attributes:
+      label: Task description
+      placeholder: What are we going to do?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptanceCriteria
+    attributes:
+      label: Acceptance Criteria
+      placeholder: What are we expecting from this?
+    validations:
+      required: true
