@@ -1,3 +1,6 @@
 [submodule "DigitalLibrary"]
 	path = DigitalLibrary
 	url = git@github.com-fraga:FraGa96/DigitalLibrary.git
+[submodule "digitalLibrary-fe"]
+	path = digitalLibrary-fe
+	url = git@github.com-fraga:FraGa96/digitalLibrary-fe.git
